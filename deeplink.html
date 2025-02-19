@@ -11,25 +11,22 @@
 
     <script>
         function openDeepLink() {
-            var userAgent = navigator.userAgent.toLowerCase();
-            var appScheme = "myapp://open?data=%7B%22tagNo%22%3A%22J2%22%2C%22locId%22%3A%22ALS%22%2C%22serviceType%22%3A%22X%22%7D";
-            var webFallback = "https://webapp.es2t.immd.gov.hk/applies2-client/immd.app.html?data=%7B%22tagNo%22%3A%22J2%22%2C%22locId%22%3A%22ALS%22%2C%22serviceType%22%3A%22X%22%7D";
-            var playStoreFallback = "https://play.google.com/store/apps/details?id=hk.gov.immd.mobileapps";
-            var appStoreFallback = "https://apps.apple.com/app/id578918010"; // Replace with actual App Store URL
+            const userAgent = navigator.userAgent.toLowerCase();
+            const deepLink = "https://webapp.es2t.immd.gov.hk/applies2-client/immd.app.html?data=%7B%22tagNo%22%3A%22J2%22%2C%22locId%22%3A%22ALS%22%2C%22serviceType%22%3A%22X%22%7D";
+            const playStoreFallback = "https://play.google.com/store/apps/details?id=hk.gov.immd.mobileapps";
+            const appStoreFallback = "https://apps.apple.com/app/id578918010";
 
-            if (/android/.test(userAgent)) {
-                // For Android (Samsung Internet, Chrome, etc.)
-                window.location.href = `intent://open?data=%7B%22tagNo%22%3A%22J2%22%2C%22locId%22%3A%22ALS%22%2C%22serviceType%22%3A%22X%22%7D#Intent;scheme=myapp;package=com.example.app;S.browser_fallback_url=${encodeURIComponent(playStoreFallback)};end;`;
-            } else if (/iphone|ipad|ipod/.test(userAgent)) {
-                // For iOS (Safari, Chrome on iOS)
-                setTimeout(function () {
-                    window.location.href = appStoreFallback; // Redirect to App Store if the app is not opened
-                }, 2000);
-                window.location.href = appScheme;
-            } else {
-                // Default fallback (e.g., Desktop or unknown device)
-                window.location.href = webFallback;
-            }
+            // Redirect to deep link
+            window.location.href = deepLink;
+
+            // If the app does not open, redirect to the app store after 2 seconds
+            setTimeout(() => {
+                if (/android/.test(userAgent)) {
+                    window.location.href = playStoreFallback;
+                } else if (/iphone|ipad|ipod/.test(userAgent)) {
+                    window.location.href = appStoreFallback;
+                }
+            }, 2000);
         }
     </script>
 </body>
