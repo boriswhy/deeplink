@@ -3,14 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Redirecting...</title>
+    <title>CSQMS</title>
 
     <script>
         function getTransformedUrl() {
             const params = new URLSearchParams(window.location.search);
-            const targetBaseUrl = "https://immdiconsuat.queue-it.net/?c=immdiconsuat&e=csqms";
+            if (!params.toString()) {
+                document.getElementById("error-container").style.display = "block";
+                document.getElementById("iframe-container").style.display = "none";
+                return null;
+            }
 
+            const targetBaseUrl = "https://immdiconsuat.queue-it.net/?c=immdiconsuat&e=csqms";
             const newParams = new URLSearchParams();
+
             params.forEach((value, key) => {
                 newParams.append(`t_${key}`, value);
             });
@@ -20,15 +26,13 @@
 
         function redirectToTarget() {
             const targetUrl = getTransformedUrl();
-            window.location.href = targetUrl;
+            if (targetUrl) {
+                document.getElementById("queue-iframe").src = targetUrl;
+            }
         }
 
         window.onload = function () {
-            try {
-                setTimeout(redirectToTarget, 2000); // Delay to allow user to see transition
-            } catch (error) {
-                document.getElementById("redirect-button").style.display = "block";
-            }
+            redirectToTarget();
         };
     </script>
 
@@ -42,7 +46,6 @@
             text-align: center;
         }
         .button {
-            display: none;
             padding: 10px 30px;
             font-size: 18px;
             background-color: #6CA52D;
@@ -55,13 +58,21 @@
         .button:hover {
             background-color: #5a8f25;
         }
+        .iframe-container {
+            width: 100%;
+            height: 100vh;
+            border: none;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <p>Redirecting you to the application...</p>
-        <p>If you are not redirected automatically, click the button below:</p>
-        <button id="redirect-button" class="button" onclick="redirectToTarget()">Go to Application</button>
+    <div id="error-container" class="container" style="display: none;">
+        <h2>Error</h2>
+        <p>Missing required parameters. Please check your URL.</p>
+    </div>
+
+    <div id="iframe-container">
+        <iframe id="queue-iframe" class="iframe-container"></iframe>
     </div>
 </body>
 </html>
