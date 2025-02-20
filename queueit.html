@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Redirecting...</title>
+
+    <script>
+        function getTransformedUrl() {
+            const params = new URLSearchParams(window.location.search);
+            const targetBaseUrl = "https://immdiconsuat.queue-it.net/?c=immdiconsuat&e=csqms";
+
+            const newParams = new URLSearchParams();
+            params.forEach((value, key) => {
+                newParams.append(`t_${key}`, value);
+            });
+
+            return targetBaseUrl + "&" + newParams.toString();
+        }
+
+        function redirectToTarget() {
+            const targetUrl = getTransformedUrl();
+            window.location.href = targetUrl;
+        }
+
+        window.onload = function () {
+            try {
+                setTimeout(redirectToTarget, 2000); // Delay to allow user to see transition
+            } catch (error) {
+                document.getElementById("redirect-button").style.display = "block";
+            }
+        };
+    </script>
+
+    <style>
+        .container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .button {
+            display: none;
+            padding: 10px 30px;
+            font-size: 18px;
+            background-color: #6CA52D;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background-color: #5a8f25;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p>Redirecting you to the application...</p>
+        <p>If you are not redirected automatically, click the button below:</p>
+        <button id="redirect-button" class="button" onclick="redirectToTarget()">Go to Application</button>
+    </div>
+</body>
+</html>
